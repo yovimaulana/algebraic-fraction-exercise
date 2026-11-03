@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Algebraic Fractions – Interactive Solutions</title>
+<style>
+:root{--bg:#f7f7f4;--card:#fff;--tx:#1c1c1a;--mu:#6b6b66;--ac:#2f6fed;--ac2:#e8f0ff;--ok:#16794a;--ok2:#e3f5ec;--bd:#dcdcd5;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17181a;--card:#222427;--tx:#ececea;--mu:#9a9a95;--ac:#7aa5ff;--ac2:#25324d;--ok:#6fd6a2;--ok2:#1c3a2c;--bd:#3a3c40}}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,Segoe UI,Roboto,sans-serif}
+.w{max-width:900px;margin:0 auto;padding:16px}
+h1{font-size:22px;margin:4px 0 12px}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px}
+.tabs button{flex:0 0 auto;border:1px solid var(--bd);background:var(--card);color:var(--tx);padding:8px 12px;border-radius:10px;cursor:pointer;font:inherit}
+.tabs button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+.tip{background:var(--ac2);border-radius:10px;padding:10px 12px;margin:10px 0;font-size:14px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.chips button{border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:8px;padding:5px 10px;cursor:pointer;font:inherit;font-size:14px}
+.chips button.on{border-color:var(--ac);background:var(--ac2)}
+.p{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:16px}
+.q{font-size:20px;margin:6px 0 12px;overflow-x:auto}
+.st{padding:8px 12px;margin:6px 0;border-left:3px solid var(--ac);background:var(--ac2);border-radius:6px;overflow-x:auto}
+.ans{padding:10px 12px;margin:10px 0;border-radius:8px;background:var(--ok2);color:var(--ok);font-weight:600;font-size:18px;overflow-x:auto}
+.b{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.b button{border:0;background:var(--ac);color:#fff;border-radius:8px;padding:8px 14px;cursor:pointer;font:inherit}
+.b button.g{background:var(--bd);color:var(--tx)}
+.f{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 2px;font-size:.92em}
+.f i{font-style:normal;border-bottom:1.5px solid currentColor;padding:0 3px}.f b{font-weight:inherit;padding:0 3px}
+.mu{color:var(--mu);font-size:13px}
+</style></head><body><div class="w">
+<h1>Algebraic Fractions – Pick a topic, pick a question</h1>
+<div class="tabs" id="tabs"></div><div class="tip" id="tip"></div>
+<div class="chips" id="chips"></div>
+<div class="p" id="panel"></div>
+<p class="mu">Always state restrictions: denominators cannot be zero. Check every equation answer by substituting back.</p>
+</div>
+<script>
+const T=[
+{n:"A. Simplifying",tip:"Factorise numerator and denominator completely (common factor, difference of squares, grouping, trinomials), then cancel common factors. Watch for (a−b) = −(b−a).",q:[
+["1a","{8x|24x^3}","{1|3x^2}","Divide top and bottom by 8x;;x ÷ x^3 leaves x^2 below."],
+["1b","{6ab|10bc}","{3a|5c}","Cancel 2 and b."],
+["1d","{4x^2y|36xy^2}","{x|9y}","Cancel 4, x and y."],
+["1e","{(2x)^2|8x}","{x|2}","(2x)^2 = 4x^2;;{4x^2|8x} = {x|2}"],
+["1l","{108(a^2b)^2|48ab^2}","{9a^3|4}","(a^2b)^2 = a^4b^2;;Cancel 12, a and b^2."],
+["1o","{−12ab^2c^3|3a^3b^2c^2}","{−4c|a^2}","−12 ÷ 3 = −4;;Cancel b^2, c^2; a/a^3 leaves a^2 below."],
+["2a","{2x|3x − x^2}","{2|3 − x}","Denominator = x(3 − x);;Cancel x."],
+["2c","{2ab − 8b^2|4b^2}","{a − 4b|2b}","Numerator = 2b(a − 4b);;Cancel 2b."],
+["2h","{3m^2 + mn|12mn + 4n^2}","{m|4n}","Top = m(3m + n); bottom = 4n(3m + n);;Cancel (3m + n)."],
+["2j","{4x^3 − 3x^2|x(2x^2 + x)}","{4x − 3|2x + 1}","Top = x^2(4x − 3); bottom = x^2(2x + 1);;Cancel x^2."],
+["3a","{x + y|x^2 − y^2}","{1|x − y}","x^2 − y^2 = (x − y)(x + y);;Cancel (x + y)."],
+["3d","{y^2 − x^2|(x − y)^2}","{x + y|y − x}","y^2 − x^2 = (y − x)(y + x) = −(x − y)(x + y);;Cancel one (x − y)."],
+["3e","{8x^2 − 4xy|4x^2 − y^2}","{4x|2x + y}","Top = 4x(2x − y); bottom = (2x − y)(2x + y);;Cancel (2x − y)."],
+["3h","{−(13y − 13x)(x + y)|x^2 − y^2}","13","−(13y − 13x) = 13(x − y);;Bottom = (x − y)(x + y); cancel both."],
+["3i","{5x − 10|x^2 + 2x − 8}","{5|x + 4}","Top = 5(x − 2); bottom = (x − 2)(x + 4);;Cancel (x − 2)."],
+["3j","{x^2 − 3x|x^2 − 8x + 15}","{x|x − 5}","Top = x(x − 3); bottom = (x − 3)(x − 5);;Cancel (x − 3)."],
+["4a","{ax + bx + a^2 + ab|ax + bx − a^2 − ab}","{x + a|x − a}","Group: x(a + b) + a(a + b) = (a + b)(x + a);;Bottom: x(a + b) − a(a + b) = (a + b)(x − a);;Cancel (a + b)."],
+["4d","{4x^2 + 9y^2 + 12xy|2px − 2qx − 3qy + 3py}","{2x + 3y|p − q}","Top = (2x + 3y)^2;;Bottom = 2x(p − q) + 3y(p − q) = (p − q)(2x + 3y);;Cancel (2x + 3y)."],
+["4f","{(x + 5y)^2 − 4y^2|x^2 − 9y^2}","{x + 7y|x − 3y}","Top = (x + 3y)(x + 7y);;Bottom = (x − 3y)(x + 3y);;Cancel (x + 3y)."],
+["4h","{x^2 + 6xy + 9y^2 − 4y^2|x^2 − 25y^2}","{x + y|x − 5y}","Top = (x + 3y)^2 − (2y)^2 = (x + y)(x + 5y);;Bottom = (x − 5y)(x + 5y);;Cancel (x + 5y)."]]},
+{n:"B. Multiply / Divide",tip:"Change ÷ into × by flipping the second fraction. Factorise everything first, then cancel across numerators and denominators before multiplying.",q:[
+["5a","{7x^2|3y^3} × {12y^4|21x^5}","{4y|3x^3}","Multiply tops and bottoms: {84x^2y^4|63x^5y^3};;Cancel 21, x^2, y^3."],
+["5b","{3xy|7y^2} ÷ {x^2y|14y}","{6|xy}","Flip: {3xy|7y^2} × {14y|x^2y};;Cancel 7, y's and x: {6|xy}."],
+["5d","{8a^2b^3|3cd^3} × 15c^4d^3","40a^2b^3c^3","Cancel 3 and d^3: 8 × 5 = 40;;c^4/c leaves c^3."],
+["5g","{2x^2|z^3} ÷ {4xyz|−5y^2}","{−5xy|2z^4}","Flip: {2x^2|z^3} × {−5y^2|4xyz};;{−10x^2y^2|4xyz^4} = {−5xy|2z^4}"],
+["5h","{3c^3|(abc)^2} × {a^3b^2|4b^2}","{3ac|4b^2}","(abc)^2 = a^2b^2c^2;;Cancel a^2, b^2, c^2."],
+["6a","{3x − 2y|5y^2} × {4x^2y|9x − 6y}","{4x^2|15y}","9x − 6y = 3(3x − 2y);;Cancel (3x − 2y) and y."],
+["6b","{m − 3n|9mn} ÷ {5m − 15n|6mn}","{2|15}","5m − 15n = 5(m − 3n);;Flip and cancel (m − 3n), mn: {6|45} = {2|15}"],
+["6d","{9x − 12y|6xy} ÷ (3x − 4y)^2","{1|2xy(3x − 4y)}","9x − 12y = 3(3x − 4y);;{3(3x − 4y)|6xy} × {1|(3x − 4y)^2};;Cancel 3 and one (3x − 4y)."],
+["6e","{6p^2 + 2pq|3pq} ÷ {9p^3 + 3p^2q|p^2q^2 − 3pq}","{2(pq − 3)|9p}","Top1 = 2p(3p + q); bottom2 numerator = 3p^2(3p + q); p^2q^2 − 3pq = pq(pq − 3);;Flip and multiply, cancel 2p... p(3p + q), pq."],
+["6g","{16x^2 − 4|(3x^2)(2yz)} ÷ {4(2x + 1)^2|9xz}","{3(2x − 1)|2xy(2x + 1)}","16x^2 − 4 = 4(2x − 1)(2x + 1);;Flip and cancel 4, (2x + 1), xz."],
+["6h","{6 − 3x|2x^2 − 8} ÷ {12x − 48|6x + 12}","{−3|4(x − 4)}","6 − 3x = −3(x − 2); 2x^2 − 8 = 2(x − 2)(x + 2);;12x − 48 = 12(x − 4); 6x + 12 = 6(x + 2);;Flip and cancel (x − 2), (x + 2), 6."],
+["6j","(x^2 − 4) ÷ {x^2 + 5x + 6|3x + 9}","3(x − 2)","x^2 − 4 = (x − 2)(x + 2); x^2 + 5x + 6 = (x + 2)(x + 3); 3x + 9 = 3(x + 3);;Multiply by {3(x + 3)|(x + 2)(x + 3)} and cancel."],
+["6k","{x^2 − y^2|x + y} × {x − y|x^2 + 2x − xy − 2y}","{x − y|x + 2}","Denominator: x(x + 2) − y(x + 2) = (x + 2)(x − y);;x^2 − y^2 = (x − y)(x + y); cancel (x + y) and (x − y)."],
+["6m","{x^2 − 3x + 2|x^2 − 2x − 3} × {x^2 − x − 6|x^2 − 4}","{x − 1|x + 1}","(x − 1)(x − 2)/(x − 3)(x + 1) × (x − 3)(x + 2)/(x − 2)(x + 2);;Cancel (x − 2), (x − 3), (x + 2)."],
+["6p","{1 − {1|x}|1 − {1|x^2}}","{x|x + 1}","Top: {x − 1|x}; bottom: {x^2 − 1|x^2};;{x − 1|x} × {x^2|(x − 1)(x + 1)} = {x|x + 1}"]]},
+{n:"C. Add / Subtract",tip:"Find the LCD (lowest common denominator), rewrite each fraction over it, combine the numerators carefully (watch minus signs!), then simplify. Turn (a − b) into −(b − a) to match denominators.",q:[
+["7a","{x|2} + {x − 5|3}","{5x − 10|6}","LCD = 6;;{3x + 2(x − 5)|6} = {5x − 10|6}"],
+["7b","{5|6x} − {4|9x}","{7|18x}","LCD = 18x;;{15 − 8|18x}"],
+["7c","3x + {1|4x}","{12x^2 + 1|4x}","3x = {12x^2|4x}."],
+["7d","{2ab|3x} − {3ab|4x} + {5ab|12x}","{ab|3x}","LCD = 12x;;{8ab − 9ab + 5ab|12x} = {4ab|12x}"],
+["7e","{2x + 1|3} − {x − 3|6}","{3x + 5|6}","{2(2x + 1) − (x − 3)|6} = {4x + 2 − x + 3|6}"],
+["7f","{2(3x − 1)|5} − {x − 2|3} − 1","{13x − 11|15}","LCD = 15;;{6(3x − 1) − 5(x − 2) − 15|15} = {18x − 6 − 5x + 10 − 15|15}"],
+["7g","{3y + 1|2} − {2y − 5|10} + {y|5}","{3y + 2|2}","LCD = 10;;{5(3y + 1) − (2y − 5) + 2y|10} = {15y + 10|10}"],
+["7h","{3(x + 1)|2} + {5(x − 2)|3} − {x|4}","{35x − 22|12}","LCD = 12;;18(x + 1) + 20(x − 2) − 3x = 35x − 22"],
+["7i","{x + 2y|4} + {3x − 5y|3} − {2x − y|6}","{11x − 12y|12}","LCD = 12;;3(x + 2y) + 4(3x − 5y) − 2(2x − y) = 11x − 12y"],
+["10a","{5|x} − {3|x^2 − 2x}","{5x − 13|x(x − 2)}","x^2 − 2x = x(x − 2);;{5(x − 2) − 3|x(x − 2)}"],
+["10b","{2|x − 3} + {3|(x − 3)^2}","{2x − 3|(x − 3)^2}","LCD = (x − 3)^2;;2(x − 3) + 3 = 2x − 3"],
+["10d","{4|x^2 − 4} + {1|2 − x}","{−1|x + 2}","{1|2 − x} = {−1|x − 2};;{4 − (x + 2)|(x − 2)(x + 2)} = {2 − x|(x − 2)(x + 2)}"],
+["10f","{5|3x − 5} − {2x|9x^2 − 25}","{13x + 25|9x^2 − 25}","9x^2 − 25 = (3x − 5)(3x + 5);;5(3x + 5) − 2x = 13x + 25"],
+["10h","{1|x − y} − {y|x^2 − xy}","{1|x}","x^2 − xy = x(x − y);;{x − y|x(x − y)} = {1|x}"],
+["10j","{4x + 2|(x − 2)(x + 3)} − {2|x + 3}","{2|x − 2}","{4x + 2 − 2(x − 2)|(x − 2)(x + 3)} = {2x + 6|…} = {2(x + 3)|…}"],
+["11a","2 − {x + 1|x − 1}","{x − 3|x − 1}","{2(x − 1) − (x + 1)|x − 1}"],
+["11b","3x + 1 + {x + 1|x − 1}","{x(3x − 1)|x − 1}","(3x + 1)(x − 1) = 3x^2 − 2x − 1;;Add x + 1: 3x^2 − x."],
+["11f","{x + 3|x^2 + x − 6} + {3|x − 2}","{4|x − 2}","x^2 + x − 6 = (x + 3)(x − 2);;First fraction = {1|x − 2}; add {3|x − 2}."],
+["11g","{1|x + 1} + {2|x − 1} + {x|1 − x^2}","{2x + 1|x^2 − 1}","{x|1 − x^2} = {−x|x^2 − 1};;(x − 1) + 2(x + 1) − x = 2x + 1"]]},
+{n:"D. Solving Equations",tip:"Multiply every term by the LCD to clear fractions, solve, then reject any answer that makes a denominator zero. Quadratic results: factorise or use the formula.",q:[
+["12a","{2|x} = {9|5}","x = {10|9}","Cross-multiply: 9x = 10."],
+["12b","−20 = {4|x}","x = −{1|5}","−20x = 4."],
+["12c","{x − 2|3} = {x + 2|4}","x = 14","4(x − 2) = 3(x + 2);;4x − 8 = 3x + 6."],
+["12d","{1 − x|2} = {5 − x|3}","x = −7","3(1 − x) = 2(5 − x);;3 − 3x = 10 − 2x."],
+["12e","{3x|2x − 5} = 4","x = 4","3x = 4(2x − 5) = 8x − 20;;5x = 20."],
+["12f","{3|2x − 1} = {4|5x + 4}","x = −{16|7}","3(5x + 4) = 4(2x − 1);;15x + 12 = 8x − 4."],
+["12g","{5|3x} = {−3|x + 2}","x = −{5|7}","5(x + 2) = −9x;;5x + 10 = −9x."],
+["12h","{x|2} − {x|5} = 3","x = 10","Multiply by 10: 5x − 2x = 30."],
+["12i","{3x|4} + 1 = {5x|6}","x = 12","Multiply by 12: 9x + 12 = 10x."],
+["12j","{x|3} + {x − 1|2} = 12","x = 15","Multiply by 6: 2x + 3(x − 1) = 72;;5x = 75."],
+["13a","{5|x − 1} = 4 − {3|x − 1}","x = 3","Bring fractions together: {8|x − 1} = 4;;x − 1 = 2."],
+["13b","{1|x} + {5|x − 1} = 0","x = {1|6}","(x − 1) + 5x = 0;;6x = 1."],
+["13c","{7|x + 1} − {5|x − 1} = 0","x = 6","7(x − 1) = 5(x + 1);;2x = 12."],
+["13d","{3|2x + 1} − {4|x − 2} = 0","x = −2","3(x − 2) = 4(2x + 1);;−5x = 10."],
+["13e","{3|x} + {2|x − 1} = 2","x = {1|2} or x = 3","3(x − 1) + 2x = 2x(x − 1);;2x^2 − 7x + 3 = 0 = (2x − 1)(x − 3)."],
+["13g","{6|x + 2} + {1|x − 2} = 1","x = 1 or x = 6","6(x − 2) + (x + 2) = x^2 − 4;;x^2 − 7x + 6 = 0 = (x − 1)(x − 6)."],
+["13i","{5|x} − {x|4} = 2","x = 2 or x = −10","Multiply by 4x: 20 − x^2 = 8x;;x^2 + 8x − 20 = 0 = (x + 10)(x − 2)."],
+["13j","{8|x + 2} − {3|x + 1} = 1","x = 0 or x = 2","8(x + 1) − 3(x + 2) = (x + 1)(x + 2);;x^2 − 2x = 0 = x(x − 2)."],
+["13p","{x − 2|9} = {4|x − 2}","x = 8 or x = −4","(x − 2)^2 = 36;;x − 2 = ±6."],
+["13r","{x + 1|x − 3} = {x − 2|x − 5}","x = 11","(x + 1)(x − 5) = (x − 2)(x − 3);;x^2 − 4x − 5 = x^2 − 5x + 6."],
+["13t","{x^2 + 5x + 6|x + 2} = 12","x = 9","x^2 + 5x + 6 = (x + 2)(x + 3);;Cancel: x + 3 = 12."]]},
+{n:"E. Word Problems",tip:"Define a variable, translate the words into a fraction equation (reciprocal = 1/number, time = distance/speed), solve, reject impossible answers (negative, non-integer), and answer what was asked.",q:[
+["15a","Two positive numbers: one is 5× the other; the difference of reciprocals is {1|10}.","8 and 40","Numbers x and 5x: {1|x} − {1|5x} = {1|10};;{4|5x} = {1|10} so x = 8."],
+["15b","Scouts: eating 9 cans/day lasts 3 days longer than 12 cans/day. Total cans?","108 cans","Let N cans: {N|9} − {N|12} = 3;;{N|36} = 3."],
+["15c","Sum of reciprocals of two consecutive positive even integers is {7|24}.","6 and 8","n, n + 2: {1|n} + {1|n + 2} = {7|24};;7n^2 − 34n − 48 = 0 → (7n + 8)(n − 6) = 0; n = 6."],
+["15d","Marc earns $x/h, Benson $(x + 3)/h; both earned $162; Marc worked 9 h more than Benson.","x = 6; Benson worked 18 h","{162|x} − {162|x + 3} = 9;;x^2 + 3x − 54 = 0 → x = 6;;Benson: 162 ÷ 9 = 18 h."],
+["16","Library at 10 km/h, then the same distance again to the post office at 8 km/h; total time 3{3|5} h. How far is the post office from home?","Each leg 16 km, so 32 km from home (library in between)","Let each leg be d km: {d|10} + {d|8} = {18|5};;{9d|40} = {18|5} so d = 16;;Two equal legs in a straight line: 2 × 16 = 32 km."],
+["17","75 km at x km/h; speed +10 km/h saves 15 min.","x = 50","{75|x} − {75|x + 10} = {1|4};;3000 = x(x + 10) → x^2 + 10x − 3000 = 0 = (x + 60)(x − 50)."],
+["18","Perimeter ratio triangle : rectangle = 3 : 8. Find x and the rectangle area.","x = 5; area = 84 cm^2","Triangle: (x − 3) + (2x − 4) + (x + 2) = 4x − 5; rectangle: 2(4x) = 8x;;{4x − 5|8x} = {3|8} → x = 5;;Rectangle 14 × 6 = 84."],
+["19","Bigger car x km/L, smaller (x + 3) km/L; smaller uses 5 L less over 300 km.","x = 12; 7.5 L","{300|x} − {300|x + 3} = 5;;900 = 5x(x + 3) → x^2 + 3x − 180 = 0 = (x + 15)(x − 12);;90 ÷ 12 = 7.5 L."]]},
+{n:"F. Change of Subject",tip:"Clear fractions and roots (square/cube both sides), expand brackets, gather every term with the wanted letter on one side, factorise it out, then divide.",q:[
+["25a","k(h − m) = n, make h subject","h = {n|k} + m","Divide by k, then add m."],
+["25b","{ab + c|d} = 2, make a subject","a = {2d − c|b}","ab + c = 2d;;ab = 2d − c."],
+["25c","{a(bx − c)|d} = e, make x subject","x = {de + ac|ab}","a(bx − c) = de;;abx = de + ac."],
+["25d","y = {a|b − x}, make x subject","x = b − {a|y}","y(b − x) = a;;b − x = a/y."],
+["25e","A − {b|y} = c^2, make y subject","y = {b|A − c^2}","{b|y} = A − c^2; flip."],
+["25f","{P|x + a} − Q = 0, make x subject","x = {P|Q} − a","P = Q(x + a);;x + a = P/Q."],
+["25g","{a|xy} − a = 2x, make y subject","y = {a|x(2x + a)}","{a|xy} = 2x + a;;y = a ÷ [x(2x + a)]."],
+["25h","√(p − qr) = s^2, make r subject","r = {p − s^4|q}","Square: p − qr = s^4."],
+["25i","√(a^2 − h) = k, make a subject","a = √(k^2 + h)","Square: a^2 − h = k^2."],
+["25l","ax^3 − b = c, make x subject","x = ∛({b + c|a})","ax^3 = b + c; take cube root."],
+["25o","ax − by = 3 − 2x, make x subject","x = {3 + by|a + 2}","ax + 2x = 3 + by;;x(a + 2) = 3 + by."],
+["25p","e(y + f) = g(y + h), make y subject","y = {gh − ef|e − g}","ey + ef = gy + gh;;y(e − g) = gh − ef."],
+["25q","{3x + y|3x − y} = {2|5}, make x subject","x = −{7y|9}","5(3x + y) = 2(3x − y);;15x + 5y = 6x − 2y;;9x = −7y."],
+["25r","y = {2x + 3|x − 4}, make x subject","x = {4y + 3|y − 2}","y(x − 4) = 2x + 3;;xy − 2x = 4y + 3;;x(y − 2) = 4y + 3."],
+["25s","p + a = {2p + 3|a}, make p subject","p = {3 − a^2|a − 2}","ap + a^2 = 2p + 3;;p(a − 2) = 3 − a^2."],
+["25t","s = ut + {1|2}at^2, make a subject","a = {2(s − ut)|t^2}","s − ut = ½at^2."],
+["25u","{1|x} + {1|y} = 1, make y subject","y = {x|x − 1}","{1|y} = 1 − {1|x} = {x − 1|x}; flip."],
+["25v","a = {1 + b|1 − b}, make b subject","b = {a − 1|a + 1}","a − ab = 1 + b;;a − 1 = b(a + 1)."],
+["26a","p = a + {bv^2|k}, make k subject","k = {bv^2|p − a}","p − a = bv^2/k; swap k and (p − a)."],
+["26b","ax − a^2 = bx − b^2, make x subject","x = a + b","x(a − b) = a^2 − b^2 = (a − b)(a + b)."],
+["26c","y = √({2x + 1|x − 3}), make x subject","x = {3y^2 + 1|y^2 − 2}","y^2(x − 3) = 2x + 1;;x(y^2 − 2) = 3y^2 + 1."],
+["26d","p^2 = √({3q − r|q}), make q subject","q = {r|3 − p^4}","p^4 q = 3q − r;;q(3 − p^4) = r."],
+["26g","T = 2π√({ℓ|g}), make g subject","g = {4π^2ℓ|T^2}","{T|2π} = √(ℓ/g);;Square, then swap g and T^2."],
+["26h","√({x + y|x − y}) = {1|3}, make x subject","x = −{5y|4}","{x + y|x − y} = {1|9};;9x + 9y = x − y;;8x = −10y."],
+["26i","u = √(v^2 − 2as), make a subject","a = {v^2 − u^2|2s}","u^2 = v^2 − 2as."]]}
+];
+const $=id=>document.getElementById(id);
+const fm=s=>{let r=s.replace(/&/g,"&amp;").replace(/</g,"&lt;"),p;
+ do{p=r;r=r.replace(/\{([^{}|]*)\|([^{}|]*)\}/g,'<span class="f"><i>$1</i><b>$2</b></span>')}while(p!==r);
+ return r.replace(/\^(\d+|[a-z])/g,"<sup>$1</sup>")};
+let ti=0,qi=0,sh=0;
+function tabs(){$("tabs").innerHTML=T.map((t,i)=>`<button class="${i==ti?'on':''}" onclick="ti=${i};qi=0;sh=0;draw()">${t.n}</button>`).join("")}
+function draw(){tabs();const t=T[ti];$("tip").innerHTML="<b>Method:</b> "+t.tip;
+ $("chips").innerHTML=t.q.map((x,i)=>`<button class="${i==qi?'on':''}" onclick="qi=${i};sh=0;draw()">${x[0]}</button>`).join("");
+ const x=t.q[qi],st=x[3].split(";;");
+ $("panel").innerHTML=`<div class="mu">Question ${x[0]}</div><div class="q">${fm(x[1])}</div>`+
+ st.slice(0,sh).map((s,i)=>`<div class="st"><b>Step ${i+1}:</b> ${fm(s)}</div>`).join("")+
+ (sh>st.length?`<div class="ans">Answer: ${fm(x[2])}</div>`:"")+
+ `<div class="b">${sh<st.length?`<button onclick="sh++;draw()">${sh?'Next step':'Show first step'}</button>`:sh==st.length?`<button onclick="sh++;draw()">Show final answer</button>`:""}
+ <button class="g" onclick="sh=${st.length+1};draw()">Reveal all</button>
+ <button class="g" onclick="qi=(qi+1)%${t.q.length};sh=0;draw()">Next question →</button></div>`}
+draw();
+</script></body></html>
